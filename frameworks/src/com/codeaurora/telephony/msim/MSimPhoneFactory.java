@@ -159,6 +159,13 @@ public class MSimPhoneFactory extends PhoneFactory {
                             Settings.Global.PREFERRED_NETWORK_MODE, i, networkModes[i]);
                     }
 
+                    // Fix default network mode error in some devices.
+                    if (i == SystemProperties.getInt("ro.config.gsm_subscription", MSimConstants.SUB2)) {
+                        networkModes[i] = Phone.NT_MODE_GSM_ONLY;
+                        MSimTelephonyManager.putIntAtIndex( context.getContentResolver(),
+                            Settings.Global.PREFERRED_NETWORK_MODE, i, networkModes[i]);
+                    }
+
                     Rlog.i(LOG_TAG, "Network Mode set to " + Integer.toString(networkModes[i]));
                     // Use reflection to construct the RIL class (defaults to RIL)
                     try {
